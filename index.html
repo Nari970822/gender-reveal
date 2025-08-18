@@ -1,168 +1,110 @@
-<!DOCTYPE html>
-<html lang="ja">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baby Gender Reveal!</title>
-    <style>
-        /* ページの基本スタイル */
-        body {
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-            background: linear-gradient(135deg, #ffdde1, #ee9ca7); /* ピンク系のグラデーション */
-            color: #fff;
-            text-align: center;
-            overflow: hidden; /* 紙吹雪がはみ出ないように */
-        }
-
-        /* 全体を囲むコンテナ */
-        .container {
-            padding: 40px;
-            background-color: rgba(0, 0, 0, 0.2);
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
-            transition: transform 0.3s ease;
-        }
-
-        .container:hover {
-            transform: scale(1.02);
-        }
-
-        /* メインの見出し */
-        h1 {
-            font-size: 2.5em;
-            margin-bottom: 20px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-        }
-
-        /* 問いかけのテキスト */
-        p {
-            font-size: 1.2em;
-            margin-bottom: 30px;
-        }
-
-        /* クリックするボタン */
-        #revealButton {
-            padding: 15px 35px;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #d85076;
-            background-color: #fff;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-
-        #revealButton:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        /* 性別の結果表示エリア */
-        #result {
-            font-size: 3em;
-            font-weight: bold;
-            margin-top: 30px;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.5);
-            /* 最初は非表示 */
-            display: none; 
-        }
-
-        /* 紙吹雪用のキャンバス */
-        #confetti-canvas {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 999;
-        }
-    </style>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2487">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 12.0px Helvetica; -webkit-text-stroke: #000000; min-height: 14.0px}
+    span.s1 {font-kerning: none}
+  </style>
 </head>
 <body>
-
-    <div class="container">
-        <h1>Boy or Girl?</h1>
-        <p>ドキドキの瞬間！ボタンを押してね</p>
-        <button id="revealButton">結果を見る！</button>
-        <div id="result">
-            </div>
-    </div>
-
-    <canvas id="confetti-canvas"></canvas>
-
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-    <script>
-        // --- 設定項目 ---
-        const GENDER = "GIRL"; // "GIRL" または "BOY" に変更してください
-        // ----------------
-
-        const revealButton = document.getElementById('revealButton');
-        const resultDiv = document.getElementById('result');
-        const myCanvas = document.getElementById('confetti-canvas');
-        const myConfetti = confetti.create(myCanvas, {
-            resize: true,
-            useWorker: true
-        });
-
-        revealButton.addEventListener('click', () => {
-            // 性別に応じてテキストと色を決定
-            let resultText = "";
-            let colors = [];
-            
-            if (GENDER === "GIRL") {
-                resultText = "🎀 It's a Girl! 🎀";
-                colors = ['#ff69b4', '#ffb6c1', '#ffffff', '#f0f8ff'];
-            } else {
-                resultText = "🎉 It's a Boy! 🎉";
-                colors = ['#4169e1', '#87ceeb', '#ffffff', '#f0f8ff'];
-            }
-
-            // 結果を表示し、ボタンを非表示にする
-            resultDiv.textContent = resultText;
-            resultDiv.style.display = 'block';
-            revealButton.style.display = 'none';
-
-            // 紙吹雪を飛ばす
-            launchConfetti(colors);
-        });
-
-        function launchConfetti(colors) {
-            const duration = 5 * 1000; // 5秒間
-            const animationEnd = Date.now() + duration;
-
-            function frame() {
-                if (Date.now() < animationEnd) {
-                    // 画面の左側から発射
-                    myConfetti({
-                        particleCount: 2,
-                        angle: 60,
-                        spread: 55,
-                        origin: { x: 0 },
-                        colors: colors
-                    });
-                    // 画面の右側から発射
-                    myConfetti({
-                        particleCount: 2,
-                        angle: 120,
-                        spread: 55,
-                        origin: { x: 1 },
-                        colors: colors
-                    });
-                    requestAnimationFrame(frame);
-                }
-            }
-            frame();
-        }
-    </script>
-
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html lang="ja"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;meta charset="UTF-8"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;</span></p>
+<p class="p1"><span class="s1">&lt;title&gt;性別発表！&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1">&lt;style&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>body {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-family: 'Georgia', serif;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>text-align: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>background-color: #fdfdfd;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>h1 {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>color: #555;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>margin-top: 40px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#balloon-container {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>position: relative;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>width: 200px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>height: 250px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>margin: 30px auto;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>cursor: pointer;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#balloon {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>width: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>height: 100%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>background-color: #d3d3d3; /* Light Gray */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>display: flex;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>justify-content: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>align-items: center;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-size: 40px;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>color: white;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>transition: transform 0.2s, opacity 0.5s;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#balloon:hover {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>transform: scale(1.1);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#balloon.popped {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>opacity: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>transform: scale(2);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#result {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-size: 4rem;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>font-weight: bold;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>opacity: 0;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>transition: opacity 1s;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>position: absolute;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>top: 50%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>left: 50%;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>transform: translate(-50%, -50%);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>pointer-events: none; /* クリックイベントを無効化 */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>#result.show {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>opacity: 1;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.boy { color: #6495ed; } /* Cornflower Blue */</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>.girl { color: #ffb6c1; } /* Light Pink */</span></p>
+<p class="p1"><span class="s1">&lt;/style&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;h1&gt;風船を割ってね！&lt;/h1&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;div id="balloon-container" onclick="popBalloon()"&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="balloon"&gt;?&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;div id="result"&gt;&lt;/div&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/div&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>function popBalloon() {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>// ★★★ ここを 'boy' または 'girl' に変更してください ★★★</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const gender = 'girl';</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const balloon = document.getElementById('balloon');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>const result = document.getElementById('result');</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>balloon.classList.add('popped');</span></p>
+<p class="p2"><span class="s1"><span class="Apple-converted-space">      </span></span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>setTimeout(() =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>if (gender === 'boy') {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>result.textContent = "It's a Boy!";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>result.className = 'boy show';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>} else {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>result.textContent = "It's a Girl!";</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">          </span>result.className = 'girl show';</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">      </span>}, 300); // アニメーションの後に表示</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>}</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">  </span>&lt;/script&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
 </body>
 </html>
