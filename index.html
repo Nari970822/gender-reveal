@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Little Star is Coming!</title>
+    <title>Our Next Chapter!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Yomogi&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-grad-start: #2c3e50;
-            --bg-grad-end: #4ca1af;
-            --box-bg: rgba(255, 255, 255, 0.1);
-            --box-shadow: rgba(0, 0, 0, 0.2);
-            --text-color: #f0f0f0;
-            --glow-color-girl: rgba(255, 105, 180, 0.8);
-            --glow-color-boy: rgba(70, 130, 180, 0.8);
-            --star-color: #ffffff;
+            --bg-color-neutral: #d5deef;
+            --bg-color-boy: #cde6f5;
+            --bg-color-girl: #f7dcec;
+            --cloud-color: #ffffff;
+            --text-color: #5b6474;
+            --moon-color: #fceea7;
+            --star-color: #fceea7;
+            --boy-color: #6c98d4;
+            --girl-color: #e88fb5;
         }
 
         body {
@@ -25,202 +26,133 @@
             align-items: center;
             height: 100vh;
             margin: 0;
-            font-family: 'Yomogi', cursive;
-            background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background-color: var(--bg-color-neutral);
             color: var(--text-color);
             text-align: center;
             overflow: hidden;
+            transition: background-color 0.8s ease;
         }
 
-        /* 背景のキラキラ星 */
-        .stars, .twinkling {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            width: 100%;
-            height: 100%;
-            display: block;
-        }
-        .stars {
-            background: #000 url(https://www.script-tutorials.com/demos/360/images/stars.png) repeat top center;
-            z-index: 0;
-        }
-        .twinkling {
-            background: transparent url(https://www.script-tutorials.com/demos/360/images/twinkling.png) repeat top center;
-            z-index: 1;
-            animation: move-twink-back 200s linear infinite;
-        }
-        @keyframes move-twink-back {
-            from {background-position:0 0;}
-            to {background-position:-10000px 5000px;}
-        }
-
+        /* 背景色変更用のクラス */
+        body.boy-reveal { background-color: var(--bg-color-boy); }
+        body.girl-reveal { background-color: var(--bg-color-girl); }
+        
         .container {
             position: relative;
-            z-index: 2;
-            padding: 40px;
-            background: var(--box-bg);
+            width: 90%;
+            max-width: 450px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.5);
             border-radius: 20px;
-            box-shadow: 0 10px 30px var(--box-shadow);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
 
-        h1 {
-            font-size: 2.2em;
+        .title-container h1 {
+            font-size: 2em;
             margin: 0;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+        .title-container p {
+            font-size: 1em;
+            margin: 10px 0 25px;
         }
 
-        p {
-            font-size: 1.1em;
-            margin: 15px 0 30px;
-            opacity: 0.9;
+        /* イラスト SVG */
+        .illustration {
+            position: absolute;
+            z-index: -1;
+            opacity: 0.8;
         }
-
-        /* 魔法の箱 */
-        #magic-box {
+        .moon {
+            top: -50px;
+            left: -60px;
             width: 150px;
-            height: 150px;
-            margin: 0 auto;
-            border: 3px solid rgba(255, 255, 255, 0.5);
-            border-radius: 15px;
+            animation: float 8s ease-in-out infinite;
+        }
+        .hanging-stars {
+            top: -40px;
+            right: -50px;
+            width: 120px;
+            animation: swing 6s ease-in-out infinite;
+        }
+
+        /* 中央の雲 */
+        .reveal-cloud {
+            position: relative;
+            width: 200px;
+            height: 120px;
+            margin: 20px auto;
+            cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 5em;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            animation: float 4s ease-in-out infinite, pulse 2.5s infinite;
+            animation: float 6s ease-in-out infinite;
+            transition: transform 0.3s, opacity 0.5s;
         }
-
-        #magic-box:hover {
+        .reveal-cloud:hover {
             transform: scale(1.05);
-            animation-play-state: paused, running; /* floatは止めて、pulseは続ける */
         }
-        
-        #magic-box.open {
-            transform: scale(1.2) rotate(10deg);
+        .reveal-cloud-svg {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.1));
+        }
+        .reveal-cloud-text {
+            font-size: 3em;
+            font-weight: 700;
+            color: var(--text-color);
+            z-index: 1;
+            padding-bottom: 10px; /* 雲の形に合わせる */
+        }
+
+        .reveal-cloud.puff-out {
+            transform: scale(2);
             opacity: 0;
-        }
-
-        @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-
-        @keyframes pulse {
-            0% { box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2); }
-            50% { box-shadow: 0 0 30px 10px rgba(255, 255, 255, 0.4); }
-            100% { box-shadow: 0 0 15px 5px rgba(255, 255, 255, 0.2); }
         }
 
         /* 結果表示 */
         #result {
             position: absolute;
-            top: 50%;
+            top: 60%;
             left: 50%;
             transform: translate(-50%, -50%) scale(0.5);
-            font-size: 2.5em;
-            font-weight: bold;
+            font-size: 3.5em;
+            font-weight: 700;
             opacity: 0;
-            transition: opacity 0.8s 0.3s ease, transform 0.8s 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.6s 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             pointer-events: none;
+            display: flex;
+            align-items: center;
+            gap: 15px;
         }
-        
         #result.show {
             opacity: 1;
             transform: translate(-50%, -50%) scale(1);
         }
-        
-        .girl { text-shadow: 0 0 20px var(--glow-color-girl), 0 0 30px var(--glow-color-girl); }
-        .boy { text-shadow: 0 0 20px var(--glow-color-boy), 0 0 30px var(--glow-color-boy); }
+        #result .boy { color: var(--boy-color); }
+        #result .girl { color: var(--girl-color); }
+        #result .icon svg {
+            width: 50px;
+            height: 50px;
+        }
+
+        /* アニメーション */
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        @keyframes swing {
+            0% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
+        }
     </style>
 </head>
 <body>
 
-    <div class="stars"></div>
-    <div class="twinkling"></div>
-
-    <div class="container">
-        <h1>A Little Star is Coming Soon...</h1>
-        <p>魔法の箱に触れてみて</p>
-
-        <div id="magic-box">?</div>
-        <div id="result"></div>
-    </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-    <script>
-        // ★★★ ここを 'boy' または 'girl' に変更してください ★★★
-        const GENDER = 'girl'; 
-
-        const magicBox = document.getElementById('magic-box');
-        const result = document.getElementById('result');
-
-        magicBox.addEventListener('click', () => {
-            // 一度しかクリックできないようにする
-            magicBox.style.pointerEvents = 'none';
-            
-            magicBox.classList.add('open');
-
-            // 性別に応じてテキストと色、紙吹雪を設定
-            let resultText = "";
-            let className = "";
-            let colors = [];
-            let particleShapes = ['circle'];
-
-            if (GENDER === 'girl') {
-                resultText = "It's a Girl!";
-                className = 'girl show';
-                colors = ['#ff69b4', '#ffb6c1', '#f0f0f0', '#ffd700'];
-            } else {
-                resultText = "It's a Boy!";
-                className = 'boy show';
-                colors = ['#4169e1', '#87ceeb', '#f0f0f0', '#c0c0c0'];
-            }
-
-            // 箱が消えるアニメーションの後に結果を表示
-            setTimeout(() => {
-                result.textContent = resultText;
-                result.className = className;
-                launchConfetti(colors);
-            }, 500);
-        });
-
-        // 凝った紙吹雪アニメーション
-        function launchConfetti(colors) {
-            const duration = 5 * 1000;
-            const end = Date.now() + duration;
-
-            (function frame() {
-                confetti({
-                    particleCount: 5,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: colors,
-                    shapes: ['star']
-                });
-                confetti({
-                    particleCount: 5,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: colors,
-                    shapes: ['star']
-                });
-
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
-        }
-    </script>
-</body>
-</html>
+    <div class="illustration moon">
+        <svg viewBox="0 0 129.8 141.2" fill="#fceea7"><path d="M117.8,93.9c-4.4-0.1-8.8-0.7-13-1.8c-21.3-5.4-35.1-22.3-39.2-43.5c-2.4-12.4,0.1-25.1,6.8-35.8 C64.1,2.5,53.4-1,42.5,0.4C21.2,3.3,4,21,0.6,42.6C-2.7,64.2,6.5,86,24.1,99.3c17.5,13.3,40.1,15.1,59.6,4.4 c10.6-5.8,18.9-15.1,23.3-26.6c2.7-7,4-14.4,4.2-21.9C111.3,55.3,117.8,93.9,117.8,93.9z"/><path d="M117.6,94.2c2.9,13.1,1.9,27-2.9,39.6c-1.8,4.7-4.3,9.1-7.5,12.9c-0.5,0.6-1.5,0-1.5-0.8c0-5.7-0.1-11.3,0-17 c0.1-6,0.3-12-1.2-17.9c-2.6-10.4-9.9-18.4-19.8-21.5c-11.4-3.6-23.3-1.5-33.3,5.1c-1.1,0.7-2.5,0.1-2.9-1.2 c-2.4-7.5-0.7-
