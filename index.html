@@ -74,8 +74,9 @@
 
         .cloud-wrapper {
             position: relative;
-            width: 250px;
-            height: 200px;
+            /* 全体のコンテナサイズを大きくしました */
+            width: 300px;
+            height: 280px;
             margin: 0 auto;
             cursor: pointer;
             animation: float 8s ease-in-out infinite;
@@ -102,12 +103,11 @@
 
         .initial-image-separate {
             position: absolute;
-            /* 画像の位置を下に変更 */
             bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
-            /* 画像の高さを大きくしました */
-            height: 140px;
+            /* 画像の高さをさらに大きくしました */
+            height: 200px;
             width: auto;
             border-radius: 15px;
             filter: drop-shadow(0 8px 12px var(--shadow-color));
@@ -116,10 +116,10 @@
         .clickable-cloud-separate {
             position: absolute;
             /* 雲の位置と大きさを調整しました */
-            top: 5px;
+            top: 10px;
             left: 50%;
             transform: translateX(-50%);
-            height: 50px;
+            height: 60px;
             width: auto;
             filter: drop-shadow(0 8px 12px var(--shadow-color));
         }
