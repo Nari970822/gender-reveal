@@ -3,135 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Baby Gender Reveal!</title>
+    <title>A Little Star is Joining Us</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-gradient-start: #e0eafc;
+            --bg-gradient-end: #cfdef3;
+            --text-color: #5c5470;
+            --cloud-color: #ffffff;
+            --star-color: #f7d794;
+            --boy-color: #a2d2ff;
+            --girl-color: #ffc2d1;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            margin: 0;
-            background-color: #f4f1de; /* Light beige background */
             display: flex;
-            flex-direction: column;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             min-height: 100vh;
+            margin: 0;
+            font-family: 'M PLUS Rounded 1c', sans-serif;
+            background: linear-gradient(135deg, var(--bg-gradient-start), var(--bg-gradient-end));
+            color: var(--text-color);
+            text-align: center;
+            overflow: hidden;
+        }
+
+        .stars-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+        }
+        .star {
+            position: absolute;
+            background-color: var(--star-color);
+            border-radius: 50%;
+            animation: twinkle 7s infinite ease-in-out;
+            opacity: 0;
+        }
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; transform: scale(0.5); }
+            50% { opacity: 0.8; transform: scale(1); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 500px;
             padding: 20px;
         }
-        .container {
-            text-align: center;
-            background-color: #ffffff;
-            padding: 40px;
-            border-radius: 15px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
+
         h1 {
-            font-size: 2.5em;
-            color: #774936; /* Brown */
-            margin-bottom: 20px;
+            font-size: clamp(2rem, 8vw, 2.8rem);
+            font-weight: 800;
+            margin-bottom: 10px;
         }
-        .illustration-container {
-            display: flex;
-            gap: 40px;
-            margin-bottom: 30px;
+
+        p {
+            font-size: clamp(1rem, 4vw, 1.2rem);
+            margin-bottom: 40px;
+            opacity: 0.8;
         }
-        .illustration {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            overflow: hidden;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-        }
-        #boy-illustration {
-            background-color: #a8dadc; /* Light blue */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2em;
-            color: #1d3557; /* Dark blue */
-        }
-        #girl-illustration {
-            background-color: #fbc4ab; /* Light orange-pink */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 2em;
-            color: #e63946; /* Red-pink */
-        }
-        button {
-            padding: 15px 30px;
-            font-size: 1.2em;
-            background-color: #e07a5f; /* Coral */
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        button:hover {
-            background-color: #d46a4d;
-        }
-        #reveal-message {
-            font-size: 3em;
-            font-weight: bold;
-            margin-top: 30px;
-            color: #774936;
-        }
-        .confetti-container {
+
+        .cloud-wrapper {
             position: relative;
+            width: 250px;
+            height: 200px;
+            margin: 0 auto;
+            cursor: pointer;
+            animation: float 8s ease-in-out infinite;
         }
-        #confetti-canvas {
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .cloud-svg, .cloud-img {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+        
+        .cloud-img {
+            object-fit: contain; /* 画像が歪まないように調整 */
+            filter: drop-shadow(0 10px 15px var(--shadow-color));
+        }
+
+        #boy-reveal, #girl-reveal {
+            opacity: 0;
+            transform: scale(0.8);
             pointer-events: none;
+        }
+
+        .cloud-wrapper.reveal #initial-cloud {
+            opacity: 0;
+            transform: scale(1.2);
+        }
+        .cloud-wrapper.reveal #boy-reveal,
+        .cloud-wrapper.reveal #girl-reveal {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        #final-message {
+            margin-top: 30px;
+            font-size: 2.5rem;
+            font-weight: 800;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s 0.8s, transform 0.5s 0.8s;
+        }
+        #final-message.show {
+            opacity: 1;
+            transform: translateY(0);
         }
     </style>
 </head>
 <body>
-    <div class="container confetti-container">
-        <h1>It's a...</h1>
-        <div class="illustration-container">
-            <div class="illustration" id="boy-illustration">👶</div>
-            <div class="illustration" id="girl-illustration">👧</div>
+    <div class="stars-container"></div>
+    <div class="container">
+        <h1>A little star is sleeping...</h1>
+        <p>イラストをそっとタップしてみて</p>
+
+        <div class="cloud-wrapper" id="cloud-wrapper">
+            <!-- ★★★ ここが最初の画像です ★★★ -->
+            <img id="initial-cloud" class="cloud-img" src="boyorgirl.png" alt="Boy or Girl?">
+
+            <!-- Boy Reveal -->
+            <svg id="boy-reveal" class="cloud-svg" viewBox="0 0 100 70">
+                <path d="M 95,50 A 20 20 0 0 1 75,70 H 25 A 20 20 0 0 1 5,50 A 15 15 0 0 1 20,35 A 25 25 0 0 1 60,25 A 20 20 0 0 1 95,50 Z" fill="#a2d2ff"/>
+                <!-- ★★★ ここに男の子の画像ファイル名を入れてください ★★★ -->
+                <image href="boy.png" x="20" y="10" width="60" height="60" />
+            </svg>
+
+            <!-- Girl Reveal -->
+            <svg id="girl-reveal" class="cloud-svg" viewBox="0 0 100 70">
+                <path d="M 95,50 A 20 20 0 0 1 75,70 H 25 A 20 20 0 0 1 5,50 A 15 15 0 0 1 20,35 A 25 25 0 0 1 60,25 A 20 20 0 0 1 95,50 Z" fill="#ffc2d1"/>
+                <!-- ★★★ ここに女の子の画像ファイル名を入れてください ★★★ -->
+                <image href="girl.png" x="20" y="10" width="60" height="60" />
+            </svg>
         </div>
-        <button onclick="revealGender()">Reveal the Surprise!</button>
-        <div id="reveal-message"></div>
-        <canvas id="confetti-canvas"></canvas>
+        
+        <div id="final-message"></div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/_dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
     <script>
-        const revealMessage = document.getElementById('reveal-message');
-        const confettiCanvas = document.getElementById('confetti-canvas');
-        const confettiInstance = confetti.create(confettiCanvas, { resize: true, useWorker: true });
+        // ★★★ ここを 'boy' または 'girl' に変更してください ★★★
+        const GENDER = 'girl';
 
-        function revealGender() {
-            const isBoy = Math.random() < 0.5; // Replace with actual gender reveal logic
-            let message = '';
-            let color = '';
+        document.addEventListener('DOMContentLoaded', () => {
+            const starsContainer = document.querySelector('.stars-container');
+            const numberOfStars = 40;
+            for (let i = 0; i < numberOfStars; i++) {
+                const star = document.createElement('div');
+                star.classList.add('star');
+                const size = Math.random() * 2 + 1;
+                star.style.width = `${size}px`;
+                star.style.height = `${size}px`;
+                star.style.top = `${Math.random() * 100}%`;
+                star.style.left = `${Math.random() * 100}%`;
+                star.style.animationDelay = `${Math.random() * 7}s`;
+                star.style.animationDuration = `${Math.random() * 5 + 5}s`;
+                starsContainer.appendChild(star);
+            }
+        });
 
-            if (isBoy) {
-                message = 'It\'s a Boy!';
-                color = '#1d3557'; // Dark blue
-                fireConfetti(['#1d3557', '#a8dadc', '#ffffff']);
+        const cloudWrapper = document.getElementById('cloud-wrapper');
+        const finalMessage = document.getElementById('final-message');
+        let revealed = false;
+
+        cloudWrapper.addEventListener('click', () => {
+            if (revealed) return;
+            revealed = true;
+            
+            cloudWrapper.classList.add('reveal');
+            
+            let messageText = '';
+            let colors = [];
+            
+            if (GENDER === 'boy') {
+                document.getElementById('boy-reveal').style.opacity = 1;
+                messageText = "It's a Boy!";
+                finalMessage.style.color = '#3d5a80';
+                colors = ['#a2d2ff', '#8ecae6', '#ffffff', '#f7d794'];
             } else {
-                message = 'It\'s a Girl!';
-                color = '#e63946'; // Red-pink
-                fireConfetti(['#e63946', '#fbc4ab', '#ffffff']);
+                document.getElementById('girl-reveal').style.opacity = 1;
+                messageText = "It's a Girl!";
+                finalMessage.style.color = '#e07a5f';
+                colors = ['#ffc2d1', '#ffafcc', '#ffffff', '#f7d794'];
             }
 
-            revealMessage.textContent = message;
-            revealMessage.style.color = color;
-        }
+            finalMessage.textContent = messageText;
+            finalMessage.classList.add('show');
+            launchConfetti(colors);
+        });
 
-        function fireConfetti(colors) {
-            confettiInstance({
-                particleCount: 200,
-                spread: 70,
-                origin: { y: 0.6 },
-                colors: colors
-            });
+        function launchConfetti(colors) {
+            const end = Date.now() + (3 * 1000);
+            (function frame() {
+                confetti({
+                    particleCount: 3,
+                    angle: 60,
+                    spread: 55,
+                    origin: { x: 0 },
+                    colors: colors,
+                    shapes: ['star']
+                });
+                confetti({
+                    particleCount: 3,
+                    angle: 120,
+                    spread: 55,
+                    origin: { x: 1 },
+                    colors: colors,
+                    shapes: ['star']
+                });
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
+            }());
         }
     </script>
 </body>
