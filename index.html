@@ -32,14 +32,16 @@
             overflow: hidden;
         }
 
-        .stars-container {
+        .stars-container, .background-decorations, .foreground-decorations {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
             z-index: 0;
+            pointer-events: none;
         }
+
         .star {
             position: absolute;
             background-color: var(--star-color);
@@ -51,30 +53,105 @@
             0%, 100% { opacity: 0; transform: scale(0.5); }
             50% { opacity: 0.8; transform: scale(1); }
         }
+        
+        .bg-cloud {
+            position: absolute;
+            opacity: 0.1;
+            filter: blur(5px);
+            animation: drift linear infinite;
+        }
+        .bg-cloud.c1 { width: 250px; top: 15%; left: -250px; animation-duration: 80s; }
+        .bg-cloud.c2 { width: 350px; top: 70%; left: -350px; animation-duration: 120s; animation-delay: -40s; }
+        @keyframes drift {
+            from { transform: translateX(0); }
+            to { transform: translateX(calc(100vw + 100%)); }
+        }
+
+        .floating-shape {
+            position: absolute;
+            color: var(--star-color);
+            font-size: 20px;
+            opacity: 0;
+            animation: float-up 20s linear infinite;
+        }
+        .shape1 { left: 15%; animation-delay: 0s; }
+        .shape2 { left: 50%; animation-delay: -5s; font-size: 14px; }
+        .shape3 { left: 85%; animation-delay: -12s; }
+        @keyframes float-up {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10%, 90% { opacity: 0.7; }
+            100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* レースカーテンのスタイル */
+        .foreground-decorations {
+            z-index: 1;
+        }
+        .lace-curtain {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 15vh;
+            opacity: 0;
+            animation: curtain-fade-in 1.5s 0.5s ease-out forwards;
+        }
+        @keyframes curtain-fade-in {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 0.6; transform: translateY(0); }
+        }
 
         .container {
             position: relative;
-            z-index: 1;
+            z-index: 2; /* カーテンより手前に表示 */
             width: 100%;
             max-width: 500px;
             padding: 20px;
+        }
+
+        h1, p {
+            animation: fade-in-up 1s ease-out forwards;
+        }
+        p {
+            animation-delay: 0.2s;
+        }
+        @keyframes fade-in-up {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         h1 {
             font-size: clamp(2rem, 8vw, 2.8rem);
             font-weight: 800;
             margin-bottom: 10px;
+            position: relative;
+            display: inline-block;
+        }
+        h1::before, h1::after {
+            content: '★';
+            font-family: sans-serif;
+            position: absolute;
+            top: 50%;
+            font-size: 0.5em;
+            color: var(--star-color);
+            opacity: 0.8;
+            animation: swing-star 3s ease-in-out infinite;
+        }
+        h1::before { left: -30px; }
+        h1::after { right: -30px; animation-delay: -1.5s; }
+        @keyframes swing-star {
+            0%, 100% { transform: translateY(-50%) rotate(0deg); }
+            50% { transform: translateY(-50%) rotate(20deg) scale(1.1); }
         }
 
         p {
             font-size: clamp(1rem, 4vw, 1.2rem);
             margin-bottom: 40px;
-            opacity: 0.8;
+            opacity: 0; /* Animation will make it visible */
         }
 
         .cloud-wrapper {
             position: relative;
-            /* 全体のコンテナサイズを大きくしました */
             width: 300px;
             height: 280px;
             margin: 0 auto;
@@ -106,23 +183,77 @@
             bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
-            /* 画像の高さをさらに大きくしました */
             height: 200px;
             width: auto;
             border-radius: 15px;
             filter: drop-shadow(0 8px 12px var(--shadow-color));
+            animation: breathe 5s ease-in-out infinite;
+        }
+        @keyframes breathe {
+            0%, 100% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-50%) scale(1.03); }
         }
 
         .clickable-cloud-separate {
             position: absolute;
-            /* 雲の位置と大きさを調整しました */
             top: 10px;
             left: 50%;
             transform: translateX(-50%);
             height: 60px;
             width: auto;
             filter: drop-shadow(0 8px 12px var(--shadow-color));
+            transition: filter 0.3s ease, transform 0.3s ease;
         }
+        
+        .cloud-prompt-text {
+            position: absolute;
+            top: 28px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 14px;
+            font-weight: 800;
+            color: var(--text-color);
+            opacity: 0.6;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+        
+        .cloud-wrapper:hover { animation-play-state: paused; }
+        .cloud-wrapper:hover .initial-image-separate { animation-play-state: paused; }
+        .cloud-wrapper:hover .clickable-cloud-separate {
+            filter: drop-shadow(0 8px 12px var(--shadow-color)) drop-shadow(0 0 15px var(--star-color));
+            transform: translateX(-50%) scale(1.05);
+        }
+        .cloud-wrapper:hover .cloud-prompt-text { opacity: 1; }
+        
+        .cloud-wrapper.clicked {
+            animation: bounce 0.5s ease;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        .rainbow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 350px;
+            height: 350px;
+            transform: translate(-50%, -55%);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.8s 0.5s ease;
+        }
+        .cloud-wrapper.reveal + .rainbow {
+            opacity: 0.2;
+        }
+        .rainbow path {
+            fill: none;
+            stroke-width: 10;
+            stroke-linecap: round;
+        }
+
 
         #boy-reveal, #girl-reveal {
             opacity: 0;
@@ -156,36 +287,51 @@
 </head>
 <body>
     <div class="stars-container"></div>
+    <div class="background-decorations">
+        <svg class="bg-cloud c1" viewBox="0 0 100 60"><path d="M 95,40 A 20 20 0 0 1 75,60 H 25 A 20 20 0 0 1 5,40 A 15 15 0 0 1 20,25 A 25 25 0 0 1 60,15 A 20 20 0 0 1 95,40 Z" fill="#ffffff"/></svg>
+        <svg class="bg-cloud c2" viewBox="0 0 100 60"><path d="M 95,40 A 20 20 0 0 1 75,60 H 25 A 20 20 0 0 1 5,40 A 15 15 0 0 1 20,25 A 25 25 0 0 1 60,15 A 20 20 0 0 1 95,40 Z" fill="#ffffff"/></svg>
+        <div class="floating-shape shape1">✨</div>
+        <div class="floating-shape shape2">✦</div>
+        <div class="floating-shape shape3">✧</div>
+    </div>
+    <div class="foreground-decorations">
+        <!-- レースカーテンのイラスト -->
+        <svg class="lace-curtain" viewBox="0 0 100 15" preserveAspectRatio="none">
+            <path d="M 0 0 H 100 V 5 Q 95 15, 90 5 Q 85 15, 80 5 Q 75 15, 70 5 Q 65 15, 60 5 Q 55 15, 50 5 Q 45 15, 40 5 Q 35 15, 30 5 Q 25 15, 20 5 Q 15 15, 10 5 Q 5 15, 0 5 Z" fill="rgba(255,255,255,0.6)"/>
+        </svg>
+    </div>
+
     <div class="container">
         <h1>A little star is sleeping...</h1>
         <p>雲をそっとタップしてみて</p>
 
         <div class="cloud-wrapper" id="cloud-wrapper">
-            <!-- Initial State with separate Image and Cloud -->
             <div id="initial-cloud" class="initial-state-container">
-                <!-- ★★★ ここが最初の画像です ★★★ -->
                 <img src="boyorgirl.png" class="initial-image-separate" alt="Boy or Girl?">
-                <!-- 画像の上に表示する雲 -->
                 <svg class="clickable-cloud-separate" viewBox="0 0 100 60">
                     <path d="M 95,40 A 20 20 0 0 1 75,60 H 25 A 20 20 0 0 1 5,40 A 15 15 0 0 1 20,25 A 25 25 0 0 1 60,15 A 20 20 0 0 1 95,40 Z" fill="#ffffff"/>
                 </svg>
+                <div class="cloud-prompt-text">タップしてね</div>
             </div>
 
-            <!-- Boy Reveal -->
             <svg id="boy-reveal" class="cloud-svg" viewBox="0 0 100 70">
                 <path d="M 95,50 A 20 20 0 0 1 75,70 H 25 A 20 20 0 0 1 5,50 A 15 15 0 0 1 20,35 A 25 25 0 0 1 60,25 A 20 20 0 0 1 95,50 Z" fill="#a2d2ff"/>
-                <!-- ★★★ ここに男の子の画像ファイル名を入れてください ★★★ -->
                 <image href="boy.png" x="20" y="10" width="60" height="60" />
             </svg>
 
-            <!-- Girl Reveal -->
             <svg id="girl-reveal" class="cloud-svg" viewBox="0 0 100 70">
                 <path d="M 95,50 A 20 20 0 0 1 75,70 H 25 A 20 20 0 0 1 5,50 A 15 15 0 0 1 20,35 A 25 25 0 0 1 60,25 A 20 20 0 0 1 95,50 Z" fill="#ffc2d1"/>
-                <!-- ★★★ ここに女の子の画像ファイル名を入れてください ★★★ -->
                 <image href="girl.png" x="20" y="10" width="60" height="60" />
             </svg>
         </div>
         
+        <svg class="rainbow" viewBox="0 0 100 50">
+            <path d="M 10 50 A 40 40 0 0 1 90 50" stroke="#ffadad"/>
+            <path d="M 20 50 A 30 30 0 0 1 80 50" stroke="#ffd6a5"/>
+            <path d="M 30 50 A 20 20 0 0 1 70 50" stroke="#fdffb6"/>
+            <path d="M 40 50 A 10 10 0 0 1 60 50" stroke="#caffbf"/>
+        </svg>
+
         <div id="final-message"></div>
     </div>
 
@@ -218,6 +364,11 @@
         cloudWrapper.addEventListener('click', () => {
             if (revealed) return;
             revealed = true;
+
+            cloudWrapper.classList.add('clicked');
+            cloudWrapper.addEventListener('animationend', () => {
+                cloudWrapper.classList.remove('clicked');
+            }, { once: true });
             
             cloudWrapper.classList.add('reveal');
             
@@ -242,29 +393,23 @@
         });
 
         function launchConfetti(colors) {
-            const end = Date.now() + (3 * 1000);
-            (function frame() {
-                confetti({
-                    particleCount: 3,
-                    angle: 60,
-                    spread: 55,
-                    origin: { x: 0 },
-                    colors: colors,
-                    shapes: ['star']
-                });
-                confetti({
-                    particleCount: 3,
-                    angle: 120,
-                    spread: 55,
-                    origin: { x: 1 },
-                    colors: colors,
-                    shapes: ['star']
-                });
+            const count = 200;
+            const defaults = {
+                origin: { y: 0.7 }
+            };
 
-                if (Date.now() < end) {
-                    requestAnimationFrame(frame);
-                }
-            }());
+            function fire(particleRatio, opts) {
+                confetti(Object.assign({}, defaults, opts, {
+                    particleCount: Math.floor(count * particleRatio),
+                    colors: colors
+                }));
+            }
+
+            fire(0.25, { spread: 26, startVelocity: 55 });
+            fire(0.2, { spread: 60 });
+            fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
+            fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
+            fire(0.1, { spread: 120, startVelocity: 45 });
         }
     </script>
 </body>
